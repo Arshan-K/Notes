@@ -18,7 +18,7 @@ class Api::V1::AuthController < ApplicationController
       token = JsonWebToken.encode(user_id: user.id)
       render json: { token: token, user: user }, status: :ok
     else
-      render json: { errors: ['Invalid email or password'] }, status: :unauthorized
+      render json: { errors: [ "Invalid email or password" ] }, status: :unauthorized
     end
   end
 
