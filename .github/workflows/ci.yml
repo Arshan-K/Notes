@@ -10,12 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fix Rails bin permissions
-        run: chmod +x bin/rails
-             chmod +x bin/rubocop
-             chmod +x bin/brakeman
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Fix Rails bin permissions
+        run: chmod +x bin/*
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
