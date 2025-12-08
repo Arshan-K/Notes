@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
+import { removeToken } from "../utils/storage";
 
 export default function Login() {
   const nav = useNavigate();
@@ -15,6 +16,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     setLoading(true);
+    removeToken();
     setError("");
 
     const data = await apiLogin(email, pw);
@@ -40,7 +42,7 @@ export default function Login() {
         <div className="space-y-4">
           <input
             className="w-full p-3 bg-dark text-black border border-gold rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-            placeholder="Email"
+            placeholder="Email or Username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />

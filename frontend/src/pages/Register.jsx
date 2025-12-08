@@ -2,6 +2,9 @@ import { useState, useContext } from "react";
 import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+import { removeToken } from "../utils/storage";
 
 export default function Register() {
   const nav = useNavigate();
@@ -11,20 +14,24 @@ export default function Register() {
   const [pw2, setPw2] = useState("");
   const [error, setError] = useState("");
   const { loginUser: contextLogin } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    removeToken();
     if (pw !== pw2) {
       setError("Passwords do not match");
       return;
     }
+    setLoading(true);
     const data = await registerUser(name, email, pw, pw2);
-
+    setLoading(false);
     if (data?.token) {
       contextLogin(data.token);
+      toast.success("Registration successful");
       nav("/notes");
     } else {
-      setError(data?.errors ? data.errors.join(", ") : "Registration failed");
+      toast.error(data?.errors ? data.errors.join(", ") : "Registration failed");
     }
   };
 
@@ -72,9 +79,19 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-gold text-black font-semibold p-2 rounded hover:bg-yellow"
+            disabled={loading}
+            className="w-full bg-gold text-black font-semibold p-3 rounded-lg mt-6 
+                      hover:bg-yellow transition flex items-center justify-center 
+                      disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Register
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin mr-2" size={20} />
+                Registering...
+              </>
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
       </div>

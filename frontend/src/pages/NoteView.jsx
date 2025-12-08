@@ -32,7 +32,15 @@ export default function NoteView() {
 
   const handleSave = async () => {
     if (!note) return;
+    if (!note.title) {
+      toast.warn("Title cannot be empty");
+      return;
+    }
 
+    if (!note.content) {
+      toast.warn("Content cannot be empty");
+      return;
+    }
     if (!id) {
       // create
       const created = await apiCreateNote({ title: note.title, content: note.content });
