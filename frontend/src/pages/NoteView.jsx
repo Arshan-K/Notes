@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getToken } from "../utils/storage";
-import { createNote as apiCreateNote } from "../api/notes";
+import { createNote as apiCreateNote, updateNote } from "../api/notes";
 import { Copy, Check } from "lucide-react";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.REACT_APP_API_URL || "";
 
@@ -36,14 +37,18 @@ export default function NoteView() {
       // create
       const created = await apiCreateNote({ title: note.title, content: note.content });
       if (created?.id) {
+        toast.success("Note created successfully!");
         nav(`/notes/${created.id}`);
       } else {
-        // show basic error (could be improved)
-        alert(created?.errors?.join("\n") || "Failed to create note");
+        toast.error(created?.errors?.join("\n") || "Failed to create note");
       }
     } else {
-      // update - not implemented yet
-      alert("Update not implemented yet");
+      const updated = await updateNote(id, { title: note.title, content: note.content });
+      if (updated?.id) {
+        toast.success("Note updated!");
+      } else {
+        toast.error(updated?.errors?.join("\n") || "Update failed");
+      }
     }
   };
 

@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Notes from "./pages/Notes";
 import NoteView from "./pages/NoteView";
 import NotePublic from "./pages/NotePublic";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter>
         <div className="min-h-screen bg-dark text-white">
           <Navbar />
+          <ToastContainer position="top-right" autoClose={4000} />
 
           <Routes>
             <Route path="/" element={<Navigate to="/notes" replace />} />
